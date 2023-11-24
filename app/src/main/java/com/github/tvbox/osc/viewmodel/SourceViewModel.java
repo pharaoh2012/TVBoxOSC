@@ -101,7 +101,7 @@ public class SourceViewModel extends ViewModel {
                     } finally {
                         if (sortJson != null) {
                             AbsSortXml sortXml = sortJson(sortResult, sortJson);
-                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 1) == 1) {
                                 AbsXml absXml = json(null, sortJson, sourceBean.getKey());
                                 if (absXml != null && absXml.movie != null && absXml.movie.videoList != null && absXml.movie.videoList.size() > 0) {
                                     sortXml.videoList = absXml.movie.videoList;
@@ -130,8 +130,12 @@ public class SourceViewModel extends ViewModel {
                 }
             };
             spThreadPool.execute(waitResponse);
-        } else if (type == 0 || type == 1) {
-            OkGo.<String>get(sourceBean.getApi())
+        } else if (type == 0 || type == 1 || type == 8) {
+            String apiUrl = sourceBean.getApi();
+            if(type == 8) {
+                apiUrl = apiUrl + "/index.json";
+            }
+            OkGo.<String>get(apiUrl)
                     .tag(sourceBean.getKey() + "_sort")
                     .execute(new AbsCallback<String>() {
                         @Override
@@ -149,11 +153,11 @@ public class SourceViewModel extends ViewModel {
                             if (type == 0) {
                                 String xml = response.body();
                                 sortXml = sortXml(sortResult, xml);
-                            } else if (type == 1) {
+                            } else if (type == 1 || type == 8) {
                                 String json = response.body();
                                 sortXml = sortJson(sortResult, json);
                             }
-                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 0) == 1 && sortXml.list != null && sortXml.list.videoList != null && sortXml.list.videoList.size() > 0) {
+                            if (sortXml != null && Hawk.get(HawkConfig.HOME_REC, 1) == 1 && sortXml.list != null && sortXml.list.videoList != null && sortXml.list.videoList.size() > 0) {
                                 ArrayList<String> ids = new ArrayList<>();
                                 for (Movie.Video vod : sortXml.list.videoList) {
                                     ids.add(vod.id);
@@ -197,6 +201,35 @@ public class SourceViewModel extends ViewModel {
                     }
                 }
             });
+        } else if(type == 8) {
+            OkGo.<String>get(homeSourceBean.getApi()+"/t/"+sortData.id+".json")
+                    .tag(homeSourceBean.getApi()+"/t/"+sortData.id+".json")
+                    .params("ac", type == 0 ? "videolist" : "detail")
+                    .params("t", sortData.id)
+                    .params("pg", page)
+                    .execute(new AbsCallback<String>() {
+
+                        @Override
+                        public String convertResponse(okhttp3.Response response) throws Throwable {
+                            if (response.body() != null) {
+                                return response.body().string();
+                            } else {
+                                throw new IllegalStateException("网络请求错误");
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            String json = response.body();
+                            json(listResult, json, homeSourceBean.getKey());
+                        }
+
+                        @Override
+                        public void onError(Response<String> response) {
+                            super.onError(response);
+                            listResult.postValue(null);
+                        }
+                    });
         } else if (type == 0 || type == 1) {
             OkGo.<String>get(homeSourceBean.getApi())
                     .tag(homeSourceBean.getApi())
@@ -281,8 +314,12 @@ public class SourceViewModel extends ViewModel {
                 }
             };
             spThreadPool.execute(waitResponse);
-        } else if (sourceBean.getType() == 0 || sourceBean.getType() == 1) {
-            OkGo.<String>get(sourceBean.getApi())
+        } else if (sourceBean.getType() == 0 || sourceBean.getType() == 1 || sourceBean.getType() == 8) {
+            String apiUrl = sourceBean.getApi();
+            if(sourceBean.getType() == 8) {
+                apiUrl += "/index.json";
+            }
+            OkGo.<String>get(apiUrl)
                     .tag("detail")
                     .params("ac", sourceBean.getType() == 0 ? "videolist" : "detail")
                     .params("ids", TextUtils.join(",", ids))
@@ -342,6 +379,34 @@ public class SourceViewModel extends ViewModel {
                     }
                 }
             });
+        } else if(type == 8) {
+            OkGo.<String>get(sourceBean.getApi()+"/detail/"+id+".json")
+                    .tag("detail")
+                    .params("ac", type == 0 ? "videolist" : "detail")
+                    .params("ids", id)
+                    .execute(new AbsCallback<String>() {
+
+                        @Override
+                        public String convertResponse(okhttp3.Response response) throws Throwable {
+                            if (response.body() != null) {
+                                return response.body().string();
+                            } else {
+                                throw new IllegalStateException("网络请求错误");
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(Response<String> response) {
+                            String json = response.body();
+                            json(detailResult, json, sourceBean.getKey());
+                        }
+
+                        @Override
+                        public void onError(Response<String> response) {
+                            super.onError(response);
+                            detailResult.postValue(null);
+                        }
+                    });
         } else if (type == 0 || type == 1) {
             OkGo.<String>get(sourceBean.getApi())
                     .tag("detail")
@@ -498,7 +563,7 @@ public class SourceViewModel extends ViewModel {
                     }
                 }
             });
-        } else if (type == 0 || type == 1) {
+        } else if (type == 0 || type == 1 || type == 8) {
             JSONObject result = new JSONObject();
             try {
                 result.put("key", url);

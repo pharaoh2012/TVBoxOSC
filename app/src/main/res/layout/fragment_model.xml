@@ -139,6 +139,7 @@
                     android:layout_height="wrap_content"
                     android:ellipsize="middle"
                     android:singleLine="true"
+                    android:text="https://pubjs.s3.bitiful.net/tvbox/a.json?a"
                     android:textColor="@android:color/white"
                     android:textSize="@dimen/ts_24" />
 

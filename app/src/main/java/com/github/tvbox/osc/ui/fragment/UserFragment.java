@@ -73,7 +73,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
     @Override
     protected void onFragmentResume() {
         super.onFragmentResume();
-        if (Hawk.get(HawkConfig.HOME_REC, 0) == 2) {
+        if (Hawk.get(HawkConfig.HOME_REC, 1) == 2) {
             List<VodInfo> allVodRecord = RoomDataManger.getAllVodRecord(10);
             List<Movie.Video> vodList = new ArrayList<>();
             for (VodInfo vodInfo : allVodRecord) {
@@ -159,12 +159,12 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
     }
 
     private void initHomeHotVod(HomeHotVodAdapter adapter) {
-        if (Hawk.get(HawkConfig.HOME_REC, 0) == 1) {
+        if (Hawk.get(HawkConfig.HOME_REC, 1) == 1) {
             if (homeSourceRec != null) {
                 adapter.setNewData(homeSourceRec);
             }
             return;
-        } else if (Hawk.get(HawkConfig.HOME_REC, 0) == 2) {
+        } else if (Hawk.get(HawkConfig.HOME_REC, 1) == 2) {
             return;
         }
         try {

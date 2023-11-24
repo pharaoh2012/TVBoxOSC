@@ -25,7 +25,7 @@ public class LivePlayerManager {
             defaultPlayerConfig.put("pl", Hawk.get(HawkConfig.PLAY_TYPE, 0));
             defaultPlayerConfig.put("ijk", Hawk.get(HawkConfig.IJK_CODEC, "软解码"));
             defaultPlayerConfig.put("pr", Hawk.get(HawkConfig.PLAY_RENDER, 0));
-            defaultPlayerConfig.put("sc", Hawk.get(HawkConfig.PLAY_SCALE, 0));
+            defaultPlayerConfig.put("sc", Hawk.get(HawkConfig.PLAY_SCALE, 1));
         } catch (JSONException e) {
             e.printStackTrace();
         }
