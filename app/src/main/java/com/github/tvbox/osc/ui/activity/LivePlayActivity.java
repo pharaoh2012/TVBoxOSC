@@ -165,6 +165,14 @@ public class LivePlayActivity extends BaseActivity {
                     case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                         showChannelList();
                         break;
+                    default:
+                        Toast.makeText(this,"keyCode:"+keyCode,Toast.LENGTH_LONG).show();
+                        if(keyCode > KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
+                            playChannel(keyCode-KeyEvent.KEYCODE_0);
+                        } else if(keyCode > KeyEvent.KEYCODE_NUMPAD_0 && keyCode <= KeyEvent.KEYCODE_NUMPAD_9) {
+                            playChannel(keyCode-KeyEvent.KEYCODE_NUMPAD_0);
+                        }
+                        break;
                 }
             }
         } else if (event.getAction() == KeyEvent.ACTION_UP) {
@@ -313,6 +321,13 @@ public class LivePlayActivity extends BaseActivity {
         showChannelInfo();
         mVideoView.start();
         return true;
+    }
+
+    // 转到某一频道，用于键盘快捷键
+    private void playChannel(int no) {
+        if (!isCurrentLiveChannelValid()) return;
+        Integer[] groupChannelIndex = gotoChannel(no);
+        playChannel(groupChannelIndex[0], groupChannelIndex[1], false);
     }
 
     private void playNext() {
@@ -1010,6 +1025,11 @@ public class LivePlayActivity extends BaseActivity {
         } else {
             return new ArrayList<>();
         }
+    }
+
+    private Integer[] gotoChannel(int no) {
+        currentLiveChannelIndex = no;
+        return getNextChannel(-1);
     }
 
     private Integer[] getNextChannel(int direction) {
