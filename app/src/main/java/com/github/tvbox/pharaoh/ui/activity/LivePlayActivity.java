@@ -130,14 +130,16 @@ public class LivePlayActivity extends BaseActivity {
             mHandler.post(mHideSettingLayoutRun);
         }
         else {
-            mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
-            mHandler.removeCallbacks(mUpdateNetSpeedRun);
-            super.onBackPressed();
+            exit();
+
+            //super.onBackPressed();
         }
     }
 
     private void exit() {
         if (System.currentTimeMillis() - mExitTime < 2000) {
+            mHandler.removeCallbacks(mConnectTimeoutChangeSourceRun);
+            mHandler.removeCallbacks(mUpdateNetSpeedRun);
             AppManager.getInstance().finishAllActivity();
         } else {
             mExitTime = System.currentTimeMillis();
@@ -148,22 +150,7 @@ public class LivePlayActivity extends BaseActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             int keyCode = event.getKeyCode();
-            if(keyCode == KeyEvent.KEYCODE_BACK) {
-                //Hawk.put(HawkConfig.EXIT_APP,true);
-                //BaseActivity homeactivity = Hawk.get(HawkConfig.HOME_ACTIVITY,this);
-                //homeactivity.finish();
-                //System.exit(0);
-                //Hawk.put(HawkConfig.HOME_ACTIVITY,this);
-                //pContent.finish();
-                //this.finish();
-                exit();
-                return true;  //不返回
-            }
-//            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-//                //jumpActivity(SettingActivity.class);
-//                playChannel(3);
-//            }
-            else if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (keyCode == KeyEvent.KEYCODE_MENU) {
                 jumpActivity(SettingActivity.class);
                 //showSettingGroup();
             } else if (!isListOrSettingLayoutVisible()) {
@@ -499,9 +486,11 @@ public class LivePlayActivity extends BaseActivity {
             @Override
             public void changeSource(int direction) {
                 if (direction > 0)
-                    playNextSource();
+                    playNext();
+                    //playNextSource();
                 else
-                    playPreSource();
+                    playPrevious();
+                    //playPreSource();
             }
         });
         controller.setCanChangePosition(false);
@@ -515,6 +504,7 @@ public class LivePlayActivity extends BaseActivity {
     private Runnable mConnectTimeoutChangeSourceRun = new Runnable() {
         @Override
         public void run() {
+            Toast.makeText(LivePlayActivity.this,"当前视频播放出错，准备播放下一个频道!",Toast.LENGTH_LONG).show();
             currentLiveChangeSourceTimes++;
             if (currentLiveChannelItem.getSourceNum() == currentLiveChangeSourceTimes) {
                 currentLiveChangeSourceTimes = 0;
@@ -931,7 +921,7 @@ public class LivePlayActivity extends BaseActivity {
             liveSettingGroup.setLiveSettingItems(liveSettingItemList);
             liveSettingGroupList.add(liveSettingGroup);
         }
-        liveSettingGroupList.get(3).getLiveSettingItems().get(Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 1)).setItemSelected(true);
+        liveSettingGroupList.get(3).getLiveSettingItems().get(Hawk.get(HawkConfig.LIVE_CONNECT_TIMEOUT, 3)).setItemSelected(true);
         liveSettingGroupList.get(4).getLiveSettingItems().get(0).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_TIME, false));
         liveSettingGroupList.get(4).getLiveSettingItems().get(1).setItemSelected(Hawk.get(HawkConfig.LIVE_SHOW_NET_SPEED, false));
         liveSettingGroupList.get(4).getLiveSettingItems().get(2).setItemSelected(Hawk.get(HawkConfig.LIVE_CHANNEL_REVERSE, false));
