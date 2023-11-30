@@ -138,7 +138,14 @@ public class LivePlayActivity extends BaseActivity {
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             int keyCode = event.getKeyCode();
-            if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if(keyCode == KeyEvent.KEYCODE_BACK) {
+                return true;  //不返回
+            }
+//            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+//                //jumpActivity(SettingActivity.class);
+//                playChannel(3);
+//            }
+            else if (keyCode == KeyEvent.KEYCODE_MENU) {
                 showSettingGroup();
             } else if (!isListOrSettingLayoutVisible()) {
                 switch (keyCode) {
@@ -155,10 +162,12 @@ public class LivePlayActivity extends BaseActivity {
                             playNext();
                         break;
                     case KeyEvent.KEYCODE_DPAD_LEFT:
-                        playPreSource();
+                        //playPreSource();
+                        playPrevious();
                         break;
                     case KeyEvent.KEYCODE_DPAD_RIGHT:
-                        playNextSource();
+                        //playNextSource();
+                        playNext();
                         break;
                     case KeyEvent.KEYCODE_DPAD_CENTER:
                     case KeyEvent.KEYCODE_ENTER:
@@ -166,7 +175,7 @@ public class LivePlayActivity extends BaseActivity {
                         showChannelList();
                         break;
                     default:
-                        Toast.makeText(this,"keyCode:"+keyCode,Toast.LENGTH_LONG).show();
+                        //Toast.makeText(this,"keyCode:"+keyCode,Toast.LENGTH_LONG).show();
                         if(keyCode > KeyEvent.KEYCODE_0 && keyCode <= KeyEvent.KEYCODE_9) {
                             playChannel(keyCode-KeyEvent.KEYCODE_0);
                         } else if(keyCode > KeyEvent.KEYCODE_NUMPAD_0 && keyCode <= KeyEvent.KEYCODE_NUMPAD_9) {
@@ -275,9 +284,11 @@ public class LivePlayActivity extends BaseActivity {
     };
 
     private void showChannelInfo() {
-        tvChannelInfo.setText(String.format(Locale.getDefault(), "%d %s %s(%d/%d)", currentLiveChannelItem.getChannelNum(),
-                currentLiveChannelItem.getChannelName(), currentLiveChannelItem.getSourceName(),
-                currentLiveChannelItem.getSourceIndex() + 1, currentLiveChannelItem.getSourceNum()));
+//        tvChannelInfo.setText(String.format(Locale.getDefault(), "%d %s %s(%d/%d)", currentLiveChannelItem.getChannelNum(),
+//                currentLiveChannelItem.getChannelName(), currentLiveChannelItem.getSourceName(),
+//                currentLiveChannelItem.getSourceIndex() + 1, currentLiveChannelItem.getSourceNum()));
+        tvChannelInfo.setText(String.format(Locale.getDefault(), "%d %s)", currentLiveChannelItem.getChannelNum(),
+                currentLiveChannelItem.getChannelName()));
 
         FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         if (tvRightSettingLayout.getVisibility() == View.VISIBLE) {

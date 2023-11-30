@@ -16,6 +16,7 @@ import androidx.core.content.PermissionChecker;
 
 import com.github.tvbox.osc.callback.EmptyCallback;
 import com.github.tvbox.osc.callback.LoadingCallback;
+import com.github.tvbox.osc.ui.activity.LivePlayActivity;
 import com.github.tvbox.osc.util.AppManager;
 import com.kingja.loadsir.callback.Callback;
 import com.kingja.loadsir.core.LoadService;
@@ -57,6 +58,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomAd
         mContext = this;
         AppManager.getInstance().addActivity(this);
         init();
+        //jumpActivity(LivePlayActivity.class);
     }
 
     @Override

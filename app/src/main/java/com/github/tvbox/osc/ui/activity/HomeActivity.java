@@ -216,6 +216,7 @@ public class HomeActivity extends BaseActivity {
             } else {
                 LOG.e("无");
             }
+            jumpActivity(LivePlayActivity.class);
             return;
         }
         showLoading();
