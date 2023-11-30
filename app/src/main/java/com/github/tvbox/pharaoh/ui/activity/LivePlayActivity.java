@@ -34,6 +34,7 @@ import com.github.tvbox.pharaoh.ui.adapter.LiveSettingGroupAdapter;
 import com.github.tvbox.pharaoh.ui.adapter.LiveSettingItemAdapter;
 import com.github.tvbox.pharaoh.ui.dialog.LivePasswordDialog;
 import com.github.tvbox.pharaoh.ui.tv.widget.ViewObj;
+import com.github.tvbox.pharaoh.util.AppManager;
 import com.github.tvbox.pharaoh.util.FastClickCheckUtil;
 import com.github.tvbox.pharaoh.util.HawkConfig;
 import com.google.gson.Gson;
@@ -92,6 +93,8 @@ public class LivePlayActivity extends BaseActivity {
         return R.layout.activity_live_play;
     }
 
+    private long mExitTime = 0;
+
     @Override
     protected void init() {
         setLoadSir(findViewById(R.id.live_root));
@@ -133,11 +136,27 @@ public class LivePlayActivity extends BaseActivity {
         }
     }
 
+    private void exit() {
+        if (System.currentTimeMillis() - mExitTime < 2000) {
+            AppManager.getInstance().finishAllActivity();
+        } else {
+            mExitTime = System.currentTimeMillis();
+            Toast.makeText(mContext, "再按一次返回键退出应用", Toast.LENGTH_SHORT).show();
+        }
+    }
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             int keyCode = event.getKeyCode();
             if(keyCode == KeyEvent.KEYCODE_BACK) {
+                //Hawk.put(HawkConfig.EXIT_APP,true);
+                //BaseActivity homeactivity = Hawk.get(HawkConfig.HOME_ACTIVITY,this);
+                //homeactivity.finish();
+                //System.exit(0);
+                //Hawk.put(HawkConfig.HOME_ACTIVITY,this);
+                //pContent.finish();
+                //this.finish();
+                exit();
                 return true;  //不返回
             }
 //            if(keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
@@ -145,7 +164,8 @@ public class LivePlayActivity extends BaseActivity {
 //                playChannel(3);
 //            }
             else if (keyCode == KeyEvent.KEYCODE_MENU) {
-                showSettingGroup();
+                jumpActivity(SettingActivity.class);
+                //showSettingGroup();
             } else if (!isListOrSettingLayoutVisible()) {
                 switch (keyCode) {
                     case KeyEvent.KEYCODE_DPAD_UP:
@@ -286,7 +306,7 @@ public class LivePlayActivity extends BaseActivity {
 //        tvChannelInfo.setText(String.format(Locale.getDefault(), "%d %s %s(%d/%d)", currentLiveChannelItem.getChannelNum(),
 //                currentLiveChannelItem.getChannelName(), currentLiveChannelItem.getSourceName(),
 //                currentLiveChannelItem.getSourceIndex() + 1, currentLiveChannelItem.getSourceNum()));
-        tvChannelInfo.setText(String.format(Locale.getDefault(), "%d %s)", currentLiveChannelItem.getChannelNum(),
+        tvChannelInfo.setText(String.format(Locale.getDefault(), "%d %s", currentLiveChannelItem.getChannelNum(),
                 currentLiveChannelItem.getChannelName()));
 
         FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -445,7 +465,8 @@ public class LivePlayActivity extends BaseActivity {
 
             @Override
             public void longPress() {
-                showSettingGroup();
+                //showSettingGroup();
+                jumpActivity(SettingActivity.class);
             }
 
             @Override
