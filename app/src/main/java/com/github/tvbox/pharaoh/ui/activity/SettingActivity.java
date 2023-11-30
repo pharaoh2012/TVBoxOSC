@@ -106,7 +106,7 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void initData() {
-        currentApi = Hawk.get(HawkConfig.API_URL, "https://pubjs.s3.bitiful.net/tvbox/a.json?a");
+        currentApi = Hawk.get(HawkConfig.API_URL, HawkConfig.API_DEFAULT);
         homeSourceKey = ApiConfig.get().getHomeSourceBean().getKey();
         homeRec = Hawk.get(HawkConfig.HOME_REC, 1);
         dnsOpt = Hawk.get(HawkConfig.DOH_URL, 0);
@@ -178,11 +178,11 @@ public class SettingActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         if ((homeSourceKey != null && !homeSourceKey.equals(Hawk.get(HawkConfig.HOME_API, ""))) ||
-                !currentApi.equals(Hawk.get(HawkConfig.API_URL, "https://pubjs.s3.bitiful.net/tvbox/a.json?a")) ||
+                !currentApi.equals(Hawk.get(HawkConfig.API_URL, HawkConfig.API_DEFAULT)) ||
                 homeRec != Hawk.get(HawkConfig.HOME_REC, 1) ||
                 dnsOpt != Hawk.get(HawkConfig.DOH_URL, 0)) {
             AppManager.getInstance().finishAllActivity();
-            if (currentApi.equals(Hawk.get(HawkConfig.API_URL, "https://pubjs.s3.bitiful.net/tvbox/a.json?a"))) {
+            if (currentApi.equals(Hawk.get(HawkConfig.API_URL, HawkConfig.API_DEFAULT))) {
                 Bundle bundle = new Bundle();
                 bundle.putBoolean("useCache", true);
                 jumpActivity(HomeActivity.class, bundle);

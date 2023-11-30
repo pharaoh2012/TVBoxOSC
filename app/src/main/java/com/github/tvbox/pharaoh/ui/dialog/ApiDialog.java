@@ -55,7 +55,7 @@ public class ApiDialog extends BaseDialog {
         ivQRCode = findViewById(R.id.ivQRCode);
         tvAddress = findViewById(R.id.tvAddress);
         inputApi = findViewById(R.id.input);
-        inputApi.setText(Hawk.get(HawkConfig.API_URL, "https://pubjs.s3.bitiful.net/tvbox/a.json?a"));
+        inputApi.setText(Hawk.get(HawkConfig.API_URL, HawkConfig.API_DEFAULT));
         findViewById(R.id.inputSubmit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,7 +78,7 @@ public class ApiDialog extends BaseDialog {
                 ArrayList<String> history = Hawk.get(HawkConfig.API_HISTORY, new ArrayList<String>());
                 if (history.isEmpty())
                     return;
-                String current = Hawk.get(HawkConfig.API_URL, "https://pubjs.s3.bitiful.net/tvbox/a.json?a");
+                String current = Hawk.get(HawkConfig.API_URL, HawkConfig.API_DEFAULT);
                 int idx = 0;
                 if (history.contains(current))
                     idx = history.indexOf(current);

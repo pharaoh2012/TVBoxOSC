@@ -79,7 +79,7 @@ public class ApiConfig {
     }
 
     public void loadConfig(boolean useCache, LoadConfigCallback callback, Activity activity) {
-        String apiUrl = Hawk.get(HawkConfig.API_URL, "https://pubjs.s3.bitiful.net/tvbox/a.json?a");
+        String apiUrl = Hawk.get(HawkConfig.API_URL, HawkConfig.API_DEFAULT);
         if (apiUrl.isEmpty()) {
             callback.error("-1");
             return;
@@ -228,24 +228,27 @@ public class ApiConfig {
         spider = DefaultConfig.safeJsonString(infoJson, "spider", "");
         // 远端站点源
         SourceBean firstSite = null;
-        for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
-            JsonObject obj = (JsonObject) opt;
-            SourceBean sb = new SourceBean();
-            String siteKey = obj.get("key").getAsString().trim();
-            sb.setKey(siteKey);
-            sb.setName(obj.get("name").getAsString().trim());
-            sb.setType(obj.get("type").getAsInt());
-            sb.setApi(obj.get("api").getAsString().trim());
-            sb.setSearchable(DefaultConfig.safeJsonInt(obj, "searchable", 1));
-            sb.setQuickSearch(DefaultConfig.safeJsonInt(obj, "quickSearch", 1));
-            sb.setFilterable(DefaultConfig.safeJsonInt(obj, "filterable", 1));
-            sb.setPlayerUrl(DefaultConfig.safeJsonString(obj, "playUrl", ""));
-            sb.setExt(DefaultConfig.safeJsonString(obj, "ext", ""));
-            sb.setCategories(DefaultConfig.safeJsonStringList(obj, "categories"));
-            if (firstSite == null)
-                firstSite = sb;
-            sourceBeanList.put(siteKey, sb);
+        if(infoJson.get("sites") != null) {
+            for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
+                JsonObject obj = (JsonObject) opt;
+                SourceBean sb = new SourceBean();
+                String siteKey = obj.get("key").getAsString().trim();
+                sb.setKey(siteKey);
+                sb.setName(obj.get("name").getAsString().trim());
+                sb.setType(obj.get("type").getAsInt());
+                sb.setApi(obj.get("api").getAsString().trim());
+                sb.setSearchable(DefaultConfig.safeJsonInt(obj, "searchable", 1));
+                sb.setQuickSearch(DefaultConfig.safeJsonInt(obj, "quickSearch", 1));
+                sb.setFilterable(DefaultConfig.safeJsonInt(obj, "filterable", 1));
+                sb.setPlayerUrl(DefaultConfig.safeJsonString(obj, "playUrl", ""));
+                sb.setExt(DefaultConfig.safeJsonString(obj, "ext", ""));
+                sb.setCategories(DefaultConfig.safeJsonStringList(obj, "categories"));
+                if (firstSite == null)
+                    firstSite = sb;
+                sourceBeanList.put(siteKey, sb);
+            }
         }
+
         if (sourceBeanList != null && sourceBeanList.size() > 0) {
             String home = Hawk.get(HawkConfig.HOME_API, "");
             SourceBean sh = getSource(home);
@@ -257,16 +260,19 @@ public class ApiConfig {
         // 需要使用vip解析的flag
         vipParseFlags = DefaultConfig.safeJsonStringList(infoJson, "flags");
         // 解析地址
-        for (JsonElement opt : infoJson.get("parses").getAsJsonArray()) {
-            JsonObject obj = (JsonObject) opt;
-            ParseBean pb = new ParseBean();
-            pb.setName(obj.get("name").getAsString().trim());
-            pb.setUrl(obj.get("url").getAsString().trim());
-            String ext = obj.has("ext") ? obj.get("ext").getAsJsonObject().toString() : "";
-            pb.setExt(ext);
-            pb.setType(DefaultConfig.safeJsonInt(obj, "type", 0));
-            parseBeanList.add(pb);
+        if(infoJson.get("parses")!=null) {
+            for (JsonElement opt : infoJson.get("parses").getAsJsonArray()) {
+                JsonObject obj = (JsonObject) opt;
+                ParseBean pb = new ParseBean();
+                pb.setName(obj.get("name").getAsString().trim());
+                pb.setUrl(obj.get("url").getAsString().trim());
+                String ext = obj.has("ext") ? obj.get("ext").getAsJsonObject().toString() : "";
+                pb.setExt(ext);
+                pb.setType(DefaultConfig.safeJsonInt(obj, "type", 0));
+                parseBeanList.add(pb);
+            }
         }
+
         // 获取默认解析
         if (parseBeanList != null && parseBeanList.size() > 0) {
             String defaultParse = Hawk.get(HawkConfig.DEFAULT_PARSE, "");
@@ -307,25 +313,45 @@ public class ApiConfig {
         } catch (Throwable th) {
             th.printStackTrace();
         }
+
         // 广告地址
-        for (JsonElement host : infoJson.getAsJsonArray("ads")) {
-            AdBlocker.addAdHost(host.getAsString());
+        if(infoJson.get("ads")!=null) {
+            for (JsonElement host : infoJson.getAsJsonArray("ads")) {
+                AdBlocker.addAdHost(host.getAsString());
+            }
         }
+
         // IJK解码配置
         boolean foundOldSelect = false;
         String ijkCodec = Hawk.get(HawkConfig.IJK_CODEC, "");
         ijkCodes = new ArrayList<>();
-        for (JsonElement opt : infoJson.get("ijk").getAsJsonArray()) {
-            JsonObject obj = (JsonObject) opt;
-            String name = obj.get("group").getAsString();
-            LinkedHashMap<String, String> baseOpt = new LinkedHashMap<>();
-            for (JsonElement cfg : obj.get("options").getAsJsonArray()) {
-                JsonObject cObj = (JsonObject) cfg;
-                String key = cObj.get("category").getAsString() + "|" + cObj.get("name").getAsString();
-                String val = cObj.get("value").getAsString();
-                baseOpt.put(key, val);
+        if(infoJson.get("ijk")!=null) {
+            for (JsonElement opt : infoJson.get("ijk").getAsJsonArray()) {
+                JsonObject obj = (JsonObject) opt;
+                String name = obj.get("group").getAsString();
+                LinkedHashMap<String, String> baseOpt = new LinkedHashMap<>();
+                for (JsonElement cfg : obj.get("options").getAsJsonArray()) {
+                    JsonObject cObj = (JsonObject) cfg;
+                    String key = cObj.get("category").getAsString() + "|" + cObj.get("name").getAsString();
+                    String val = cObj.get("value").getAsString();
+                    baseOpt.put(key, val);
+                }
+                IJKCode codec = new IJKCode();
+                codec.setName(name);
+                codec.setOption(baseOpt);
+                if (name.equals(ijkCodec) || TextUtils.isEmpty(ijkCodec)) {
+                    codec.selected(true);
+                    ijkCodec = name;
+                    foundOldSelect = true;
+                } else {
+                    codec.selected(false);
+                }
+                ijkCodes.add(codec);
             }
+        } else {
             IJKCode codec = new IJKCode();
+            LinkedHashMap<String, String> baseOpt = new LinkedHashMap<>();
+            String name = "软解码";
             codec.setName(name);
             codec.setOption(baseOpt);
             if (name.equals(ijkCodec) || TextUtils.isEmpty(ijkCodec)) {
@@ -337,6 +363,7 @@ public class ApiConfig {
             }
             ijkCodes.add(codec);
         }
+
         if (!foundOldSelect && ijkCodes.size() > 0) {
             ijkCodes.get(0).selected(true);
         }
