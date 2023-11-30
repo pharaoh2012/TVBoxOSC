@@ -181,10 +181,12 @@ public class LivePlayActivity extends BaseActivity {
                             playNext();
                         break;
                     case KeyEvent.KEYCODE_DPAD_LEFT:
+                    case KeyEvent.KEYCODE_CHANNEL_DOWN:
                         //playPreSource();
                         playPrevious();
                         break;
                     case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    case KeyEvent.KEYCODE_CHANNEL_UP:
                         //playNextSource();
                         playNext();
                         break;
