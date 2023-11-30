@@ -22,7 +22,7 @@
             android:layout_gravity="center" />
     </LinearLayout>
 
-    <com.github.tvbox.osc.ui.tv.widget.NoScrollViewPager
+    <com.github.tvbox.pharaoh.ui.tv.widget.NoScrollViewPager
         android:id="@+id/mViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -68,7 +68,7 @@
             </LinearLayout>
         </LinearLayout>
 
-        <com.github.tvbox.osc.ui.tv.widget.SearchKeyboard
+        <com.github.tvbox.pharaoh.ui.tv.widget.SearchKeyboard
             android:id="@+id/keyBoardRoot"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

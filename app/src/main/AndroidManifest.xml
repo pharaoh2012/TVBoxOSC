@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.github.tvbox.osc">
+    package="com.github.tvbox.pharaoh">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
     <application
-        android:name=".base.App"
+        android:name="com.github.tvbox.pharaoh.base.App"
         android:allowBackup="true"
         android:banner="@drawable/app_banner"
         android:configChanges="orientation|keyboardHidden|screenSize"
@@ -26,7 +26,7 @@
         android:usesCleartextTraffic="true">
 
         <activity
-            android:name=".ui.activity.HomeActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.HomeActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,36 +37,36 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.LivePlayActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.LivePlayActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.activity.DetailActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.DetailActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.activity.PlayActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.PlayActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.activity.PushActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.PushActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.activity.SearchActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.SearchActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.activity.SettingActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.SettingActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.activity.HistoryActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.HistoryActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.activity.CollectActivity"
+            android:name="com.github.tvbox.pharaoh.ui.activity.CollectActivity"
             android:screenOrientation="landscape" />
 
-        <receiver android:name=".receiver.SearchReceiver">
+        <receiver android:name="com.github.tvbox.pharaoh.receiver.SearchReceiver">
             <intent-filter>
                 <action android:name="android.content.movie.search.Action" />
             </intent-filter>
         </receiver>
-        <receiver android:name=".receiver.CustomWebReceiver">
+        <receiver android:name="com.github.tvbox.pharaoh.receiver.CustomWebReceiver">
             <intent-filter>
                 <action android:name="android.content.movie.custom.web.Action" />
             </intent-filter>

@@ -2,7 +2,7 @@ package com.github.catvod.crawler;
 
 import android.content.Context;
 
-import com.github.tvbox.osc.base.App;
+import com.github.tvbox.pharaoh.base.App;
 
 import org.json.JSONObject;
 
