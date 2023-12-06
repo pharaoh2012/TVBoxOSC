@@ -1,5 +1,6 @@
 package com.github.tvbox.pharaoh.util;
 
+import com.github.tvbox.pharaoh.BuildConfig;
 /**
  * @author pj567
  * @date :2020/12/23
@@ -26,5 +27,5 @@ public class HawkConfig {
     public static final String LIVE_CONNECT_TIMEOUT = "live_connect_timeout";
     public static final String LIVE_SHOW_NET_SPEED = "live_show_net_speed";
     public static final String LIVE_SHOW_TIME = "live_show_time";
-    public static final String API_DEFAULT = "https://tvbox-config.s3.bitiful.net/tvbox/live.json?v=1.0";
+    public static final String API_DEFAULT = BuildConfig.API_DEFAULT;
 }
