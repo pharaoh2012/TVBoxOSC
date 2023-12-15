@@ -169,13 +169,11 @@ public class LivePlayActivity extends BaseActivity {
                         break;
                     case KeyEvent.KEYCODE_DPAD_LEFT:
                     case KeyEvent.KEYCODE_CHANNEL_DOWN:
-                        //playPreSource();
-                        playPrevious();
+                        playPreSource();
                         break;
                     case KeyEvent.KEYCODE_DPAD_RIGHT:
                     case KeyEvent.KEYCODE_CHANNEL_UP:
-                        //playNextSource();
-                        playNext();
+                        playNextSource();
                         break;
                     case KeyEvent.KEYCODE_DPAD_CENTER:
                     case KeyEvent.KEYCODE_ENTER:
@@ -486,11 +484,9 @@ public class LivePlayActivity extends BaseActivity {
             @Override
             public void changeSource(int direction) {
                 if (direction > 0)
-                    playNext();
-                    //playNextSource();
+                    playNextSource();
                 else
-                    playPrevious();
-                    //playPreSource();
+                    playPreSource();
             }
         });
         controller.setCanChangePosition(false);
